@@ -52,20 +52,6 @@
 			    }
 			});
 
-			var bugFixCommit = {
-			    messageAuthorDisplay: false,
-			    messageBranchDisplay: false,
-			    messageHashDisplay: false,
-			    message: "Bug fix commit(s)"
-			};
-
-			var stabilizationCommit = {
-			    messageAuthorDisplay: false,
-			    messageBranchDisplay: false,
-			    messageHashDisplay: false,
-			    message: "Release stabilization commit(s)"
-			};
-
 			// You can manually fix columns to control the display.
 			var masterCol = 0;
 			var releaseCol = 1;
@@ -230,14 +216,6 @@
 					});
 
 					master.merge(sop_2);
-
-					var sprint = gitgraph.branch({
-					    parentBranch: master,
-					    name: "Sprint/2019.05",
-					    column: sprint2Col
-					});
-					sprint.commit("[CAPTAIN] Checkout new sprint branch with latest from master branch");
-
 
 					var sop_4 = gitgraph.branch({
 					    parentBranch: master,
