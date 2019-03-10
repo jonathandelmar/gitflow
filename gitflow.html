@@ -1,0 +1,363 @@
+<html>
+	<head>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/gitgraph.js/1.15.1/gitgraph.js"></script>
+		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/gitgraph.js/1.15.1/gitgraph.css" />
+		<style type="text/css">
+			.case-scenario-container {
+				text-align: center;
+				border-top: 1px solid;
+				padding-bottom: 35px;
+			}
+			canvas {
+				border: 1px solid;
+			}
+		</style>
+	</head>
+	<body>
+		<script type="text/javascript">
+			var graphConfig = new GitGraph.Template({
+			    colors: ["#00bcd4", "#f5a555", "#ffeb3b", "#e91e63"],
+			    branch: {
+			        color: "#666",
+			        lineWidth: 3,
+			        spacingX: 60,
+			        mergeStyle: "straight",
+			        showLabel: true,
+			        // display branch names on graph
+			        labelFont: "normal 10pt Arial",
+			        labelRotation: 0
+			    },
+			    commit: {
+			        spacingY: -60,
+			        dot: {
+			            size: 8,
+			            strokeColor: "#000000",
+			            strokeWidth: 4
+			        },
+			        tag: {
+			            font: "normal 10pt Arial",
+			            color: "yellow"
+			        },
+			        message: {
+			            color: "black",
+			            font: "normal 12pt Arial",
+			            displayAuthor: false,
+			            displayBranch: false,
+			            displayHash: false
+			        }
+			    },
+			    arrow: {
+			        size: 8,
+			        offset: 3
+			    }
+			});
+
+			var bugFixCommit = {
+			    messageAuthorDisplay: false,
+			    messageBranchDisplay: false,
+			    messageHashDisplay: false,
+			    message: "Bug fix commit(s)"
+			};
+
+			var stabilizationCommit = {
+			    messageAuthorDisplay: false,
+			    messageBranchDisplay: false,
+			    messageHashDisplay: false,
+			    message: "Release stabilization commit(s)"
+			};
+
+			// You can manually fix columns to control the display.
+			var masterCol = 0;
+			var releaseCol = 1;
+			var hotfixCol = 2;
+			var sprintCol = 3;
+			var feature1Col = 4;
+			var feature2Col = 5;
+			var feature3Col = 6;
+			var sprint2Col = 7;
+			var sprint3Col = 8;
+			var feature4Col = 9;
+
+		</script>
+
+		<div class="case-scenario-container">
+			<h1>Case 1 : All Features Successfully Deployed</h1>
+			<canvas id="allSuccessful"></canvas>
+			<script type="text/javascript">
+				(function() {
+					var config = {
+						elementId: "allSuccessful",
+					    template: graphConfig,
+					    mode: "extended",
+					    orientation: "horizontal"
+					};
+					var gitgraph = new GitGraph(config);
+
+					var master = gitgraph.branch({
+					    name: "master",
+					    column: masterCol
+					});
+					master.commit("Stable version");
+
+					var sprint = gitgraph.branch({
+					    parentBranch: master,
+					    name: "Sprint/2019.05",
+					    column: sprintCol
+					});
+					sprint.commit("[CAPTAIN] Checkout from master branch");
+
+					var sop_1 = gitgraph.branch({
+					    parentBranch: master,
+					    name: "SOP-11111",
+					    column: feature1Col
+					});
+					sop_1.commit("SOP-11111 : Fix display of menu");
+
+					var sop_2 = gitgraph.branch({
+					    parentBranch: master,
+					    name: "SOP-22222",
+					    column: feature2Col
+					});
+					sop_2.commit("SOP-22222 : Adjust incorrect driving time");
+
+					var sop_3 = gitgraph.branch({
+					    parentBranch: master,
+					    name: "SOP-33333",
+					    column: feature3Col
+					});
+					sop_3.commit("SOP-33333 : Remove infinite loop");
+
+					sop_1.merge(sprint);
+					sop_2.merge(sprint);
+					sop_3.merge(sprint);
+
+					var release = gitgraph.branch({
+					    parentBranch: sprint,
+					    name: "Release/2019.05.1",
+					    column: releaseCol
+					});
+					release.commit("[CAPTAIN] Checkout from sprint branch");
+					release.merge(master);
+					master.commit({
+					    dotStrokeWidth: 10,
+					    message: "[TAG MESSAGE] Sprint 2019.05 Release 1",
+					    tag: "Release/2019.05.1"
+					});
+				})();
+			</script>
+		</div>
+
+		<div class="case-scenario-container">
+			<h1>Case 2 : Feature Deployed with Errors</h1>
+			<canvas id="withErrors"></canvas>
+			<script type="text/javascript">
+				(function() {
+					var config = {
+						elementId: "withErrors",
+					    template: graphConfig,
+					    mode: "extended",
+					    orientation: "horizontal"
+					};
+					var gitgraph = new GitGraph(config);
+
+					var master = gitgraph.branch({
+					    name: "master",
+					    column: masterCol
+					});
+					master.commit("Stable version");
+
+					var sprint = gitgraph.branch({
+					    parentBranch: master,
+					    name: "Sprint/2019.05",
+					    column: sprintCol
+					});
+					sprint.commit("[CAPTAIN] Checkout from master branch");
+
+					var sop_1 = gitgraph.branch({
+					    parentBranch: master,
+					    name: "SOP-11111",
+					    column: feature1Col
+					});
+					sop_1.commit("SOP-11111 : Fix display of menu");
+
+					var sop_2 = gitgraph.branch({
+					    parentBranch: master,
+					    name: "SOP-22222",
+					    column: feature2Col
+					});
+					sop_2.commit("SOP-22222 : Commit with ERRORS");
+
+					var sop_3 = gitgraph.branch({
+					    parentBranch: master,
+					    name: "SOP-33333",
+					    column: feature3Col
+					});
+					sop_3.commit("SOP-33333 : Remove infinite loop");
+
+					sop_1.merge(sprint);
+					sop_2.merge(sprint);
+					sop_3.merge(sprint);
+
+					var release = gitgraph.branch({
+					    parentBranch: sprint,
+					    name: "Release/2019.05.1",
+					    column: releaseCol
+					});
+					release.commit("[CAPTAIN] Checkout from sprint branch");
+
+					var sprint = gitgraph.branch({
+					    parentBranch: master,
+					    name: "Sprint/2019.05",
+					    column: sprint2Col
+					});
+					sprint.commit("[CAPTAIN] Checkout production server with previous release branch, delete sprint branch, checkout new sprint branch from master branch");
+
+					sop_3.merge(sprint);
+					sop_1.merge(sprint);
+
+					var release = gitgraph.branch({
+					    parentBranch: sprint,
+					    name: "Release/2019.05.2",
+					    column: releaseCol
+					});
+					release.commit("[CAPTAIN] Checkout from new sprint branch");
+
+					release.merge(master);
+					master.commit({
+					    dotStrokeWidth: 10,
+					    message: "[TAG MESSAGE] Sprint 2019.05 Release 2",
+					    tag: "Release/2019.05.2"
+					});
+
+					master.merge(sop_2);
+
+					var sprint = gitgraph.branch({
+					    parentBranch: master,
+					    name: "Sprint/2019.05",
+					    column: sprint2Col
+					});
+					sprint.commit("[CAPTAIN] Checkout new sprint branch with latest from master branch");
+
+
+					var sop_4 = gitgraph.branch({
+					    parentBranch: master,
+					    name: "SOP-44444",
+					    column: feature1Col
+					});
+					sop_4.commit("SOP-44444 : New feature to be done");
+					
+					sop_2.merge(sprint);
+					sop_4.merge(sprint);
+
+					var release = gitgraph.branch({
+					    parentBranch: sprint,
+					    name: "Release/2019.05.3",
+					    column: releaseCol
+					});
+					release.commit("[CAPTAIN] Checkout from new sprint branch");
+
+					release.merge(master);
+					master.commit({
+					    dotStrokeWidth: 10,
+					    message: "[TAG MESSAGE] Sprint 2019.05 Release 3",
+					    tag: "Release/2019.05.3"
+					});
+				})();
+			</script>
+		</div>
+
+		<div class="case-scenario-container">
+			<h1>Case 3 : Hotfix</h1>
+			<canvas id="hotfix"></canvas>
+			<script type="text/javascript">
+				(function() {
+					var config = {
+						elementId: "hotfix",
+					    template: graphConfig,
+					    mode: "extended",
+					    orientation: "horizontal"
+					};
+					var gitgraph = new GitGraph(config);
+
+					var master = gitgraph.branch({
+					    name: "master",
+					    column: masterCol
+					});
+					master.commit("Stable version");
+
+					var sprint = gitgraph.branch({
+					    parentBranch: master,
+					    name: "Sprint/2019.05",
+					    column: sprintCol
+					});
+					sprint.commit("[CAPTAIN] Checkout from master branch");
+
+					var sop_1 = gitgraph.branch({
+					    parentBranch: master,
+					    name: "SOP-11111",
+					    column: feature1Col
+					});
+					sop_1.commit("SOP-11111 : Fix display of menu");
+
+					var sop_2 = gitgraph.branch({
+					    parentBranch: master,
+					    name: "SOP-22222",
+					    column: feature2Col
+					});
+					sop_2.commit("SOP-22222 : Adjust incorrect driving time");
+
+					var sop_3 = gitgraph.branch({
+					    parentBranch: master,
+					    name: "SOP-33333",
+					    column: feature3Col
+					});
+
+					var hotfix = gitgraph.branch({
+					    parentBranch: master,
+					    name: "SOP-hotfix",
+					    column: hotfixCol
+					});
+					hotfix.commit("SOP-hotfix : Urgent fix to be deployed");					
+
+					var release = gitgraph.branch({
+					    parentBranch: hotfix,
+					    name: "Release/2019.05.1",
+					    column: releaseCol
+					});
+					release.commit("[CAPTAIN] Checkout from hotfix");
+					release.merge(master);
+					master.commit({
+					    dotStrokeWidth: 10,
+					    message: "[TAG MESSAGE] Sprint 2019.05 Release 1",
+					    tag: "Release/2019.05.1"
+					});
+
+					sop_3.commit("SOP-33333 : Remove infinite loop");
+
+					master.merge(sprint);
+					master.merge(sop_1);
+					master.merge(sop_2);
+					master.merge(sop_3);
+
+					sop_1.merge(sprint);
+					sop_2.merge(sprint);
+					sop_3.merge(sprint);
+
+					var release = gitgraph.branch({
+					    parentBranch: sprint,
+					    name: "Release/2019.05.2",
+					    column: releaseCol
+					});
+					release.commit("[CAPTAIN] Checkout from sprint branch");
+					release.merge(master);
+					master.commit({
+					    dotStrokeWidth: 10,
+					    message: "[TAG MESSAGE] Sprint 2019.05 Release 2",
+					    tag: "Release/2019.05.2"
+					});
+				})();
+			</script>
+		</div>
+
+	</body>
+</html>
