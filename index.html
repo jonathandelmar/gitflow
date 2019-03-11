@@ -20,12 +20,11 @@
 			<li>Sprint branch should be deleted every after sprint.</li>
 			<li>Feature branch should be deleted every after sprint IF already deployed to live.</li>
 			<li>If Feature branch is set to completed, a successor branch should be created if necessary before deleting every after sprint.</li>
-			<li>Only three Release branch should exist. Other older branches should be deleted.</li>
+			<li>Only three Release branches should exist. Other older branches should be deleted.</li>
 		</ul>
 		<h2>How to Deploy :</h2>
 		<ul>
-			<li>git fetch origin Release/2019.05.1</li>
-			<li>git checkout Release/2019.05.1</li>
+			<li>git fetch origin Release/2019.05.1 && git checkout Release/2019.05.1</li>
 		</ul>
 		<script type="text/javascript">
 			var graphConfig = new GitGraph.Template({
