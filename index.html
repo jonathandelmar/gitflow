@@ -14,6 +14,19 @@
 		</style>
 	</head>
 	<body>
+		<h2>Guidelines :</h2>
+		<ul>
+			<li>Feature and Sprint branches are disposable.</li>
+			<li>Sprint branch should be deleted every after sprint.</li>
+			<li>Feature branch should be deleted every after sprint IF already deployed to live.</li>
+			<li>If Feature branch is set to completed, a successor branch should be created if necessary before deleting every after sprint.</li>
+			<li>Only three Release branch should exist. Other older branches should be deleted.</li>
+		</ul>
+		<h2>How to Deploy :</h2>
+		<ul>
+			<li>git fetch origin Release/2019.05.1</li>
+			<li>git checkout Release/2019.05.1</li>
+		</ul>
 		<script type="text/javascript">
 			var graphConfig = new GitGraph.Template({
 			    colors: ["#00bcd4", "#f5a555", "#ffeb3b", "#e91e63"],
@@ -336,11 +349,5 @@
 				})();
 			</script>
 		</div>
-
-		<h2>How to Deploy:</h2>
-		<ul>
-			<li>git fetch origin Release/2019.05.1</li>
-			<li>git checkout Release/2019.05.1</li>
-		</ul>
 	</body>
 </html>
